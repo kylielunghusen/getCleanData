@@ -8,7 +8,7 @@
 
 3. CodeBook.md - contains information about the variables in the tidy dataset
 
-4. UCIGetCleanTidyData.R - tidy data file, as submitted on Coursera project page
+4. UCIGetCleanTidyData.txt - tidy data file, as submitted on Coursera project page
 
 ## Raw Data
 * The raw data from which this tidy dataset is derived can be found at the following location:
