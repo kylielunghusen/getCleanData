@@ -1,7 +1,6 @@
 # Course Project for Getting and Cleaning Data - README
-----------------------------------------------
 
-## FILES
+## Files
 
 1. run_analysis.R
 
@@ -9,27 +8,26 @@
 
 3. CodeBook.md - contains information about the variables in the tidy dataset
 
-4. UCIGetCleanTidyData.txt - tidy data file, submitted on Coursera project page, not included here
+4. UCIGetCleanTidyData.R - tidy data file, as submitted on Coursera project page
 
-----------------------------------------------
-
-## RAW DATA
-The raw data from which this tidy dataset is derived can be found at the following location:
+## Raw Data
+* The raw data from which this tidy dataset is derived can be found at the following location:
 https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
-README for the raw data is in README.txt in the UCI HAR zip file, and also here:
+
+* README for the raw data is in README.txt in the UCI HAR zip file, and also here:
 http://archive.ics.uci.edu/ml/machine-learning-databases/00240/UCI%20HAR%20Dataset.names
-More information about the features data is in features_info.txt in the UCI HAR zip file.
-More information about the data used to create the tidy data file is in CodeBook.md in this repo.
 
-----------------------------------------------
+* More information about the features data is in features_info.txt in the UCI HAR zip file.
 
-## HOW TO RUN THE SCRIPT
+* More information about the data used to create the tidy data file is in CodeBook.md in this repo.
 
-Command:
-> source("run_analysis.R")
+## How to run the script
 
-Functionality:
+### Command:
+`> source("run_analysis.R")`
 
+###Functionality:
+```
 # Necessary files are read into R
 xTest <- read.table("X_test.txt",header=FALSE)
 xTrain <- read.table("X_train.txt",header=FALSE)
@@ -74,15 +72,12 @@ grouped <- group_by(fullFrame, Subject, Activity)
 # This fulfils project requirement: "From the data set in step 4, creates a second, independent tidy data set with the average of 
 # each variable for each activity and each subject."
 finalFrame <- summarise_each(grouped, funs(mean))
+```
 
-----------------------------------------------
+## How to read the tidy data file into R
+`> read.table(file = "UCIGetCleanTidyData.txt", header = TRUE)`
 
-HOW TO READ THE TIDY DATA FILE INTO R:
-> (data frame name of choice) <- read.table(file = "UCIGetCleanTidyData.txt", header = TRUE)
-
-----------------------------------------------
-
-NOTES
+## Notes
 
 The script assumes that all files are in same directory.
 
@@ -91,14 +86,14 @@ Multiple scripts could have been used, but a single integrated script has been c
 Dplyr package must be installed before running the script.
 
 Files used by the script:
-	* X_test.txt - features data for test set
-	* X_train.txt - features data for train set
-	* Y_test.txt - activities data for test set
-	* Y_train.txt - activities data for train set
-	* subject_test.txt - subject data for test set
-	* subject_train.txt - subject data for train set
-	* features.txt - list of all features, used as column names for the X data
-	* activity_labels.txt - list of activities, corresponds to the integer codes in the Y data
+* X_test.txt - features data for test set
+* X_train.txt - features data for train set
+* Y_test.txt - activities data for test set
+* Y_train.txt - activities data for train set
+* subject_test.txt - subject data for test set
+* subject_train.txt - subject data for train set
+* features.txt - list of all features, used as column names for the X data
+* activity_labels.txt - list of activities, corresponds to the integer codes in the Y data
 	
 The files fit together in the following way (before being subsetted and summarised):
 * subject_test.txt and subject_train.txt have a total 10299 values, which make up the first column
@@ -122,3 +117,4 @@ When the result is viewed simply as a text file, it does not look ‘tidy’ to 
 * Each variable forms a column
 * Each observation forms a row
 * The data set contains information on only one observational unit of analysis (human movement)
+
