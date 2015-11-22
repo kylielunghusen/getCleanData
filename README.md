@@ -2,9 +2,9 @@
 
 ## Files
 
-1. run_analysis.R
+1. run_analysis.R - the script for creating the tidy dataset
 
-2. README.md - This file. Explains the script and associated files
+2. README.md - this file. Explains the script and associated files
 
 3. CodeBook.md - contains information about the variables in the tidy dataset
 
@@ -27,51 +27,58 @@ http://archive.ics.uci.edu/ml/machine-learning-databases/00240/UCI%20HAR%20Datas
 `> source("run_analysis.R")`
 
 ###Functionality:
+Necessary files are read into R:
 ```
-# Necessary files are read into R
 xTest <- read.table("X_test.txt",header=FALSE)
 xTrain <- read.table("X_train.txt",header=FALSE)
 yTest <- read.table("Y_test.txt",header=FALSE)
 yTrain <- read.table("Y_train.txt",header=FALSE)
 subjectTest <- read.table("subject_test.txt",header=FALSE)
 subjectTrain <- read.table("subject_train.txt",header=FALSE)
-
-# Some of the files must be coerced to character class when read
+```
+Some of the files must be coerced to character class when read:
+```
 features <- read.table("features.txt",header=FALSE,colClasses="character")
 activityLabels <- read.table("activity_labels.txt",header=FALSE,colClasses="character")
-
-# Bind together by rows the test and train data for each of the X, Y and subject datasets
-# This fulfils project requirement: "Merges the training and the test sets to create one data set."
+```
+Bind together by rows the test and train data for each of the X, Y and subject datasets. This fulfils project requirement: "Merges the training and the test sets to create one data set.":
+```
 subject <- rbind(subjectTest,subjectTrain)
 x <- rbind(xTest,xTrain)
 y <- rbind(yTest,yTrain)
-
-# Convert Y data from a single-column data frame of integer codes to a vector of activity labels
-# This fulfiles project requirement: "Uses descriptive activity names to name the activities in the data set"
+```
+Convert Y data from a single-column data frame of integer codes to a vector of activity labels. This fulfiles project requirement: "Uses descriptive activity names to name the activities in the data set":
+```
 y <- activityLabels[,2][y[,1]] # convert y to vector and y codes to names
-
-# The values in the second column of the features data frame are used as column names for the X dataset
+```
+The values in the second column of the features data frame are used as column names for the X dataset:
+```
 names(x) <- features[,2] # give column names to x
-
-# X data is subsetted to only contain columns with "mean" or "std" in the name
-# This fulfils project requirement: "Extracts only the measurements on the mean and standard deviation for each measurement."
+```
+X data is subsetted to only contain columns with "mean" or "std" in the name. This fulfils project requirement: "Extracts only the measurements on the mean and standard deviation for each measurement.":
+```
 x <- x[, grep("mean|std", names(x))] # shrink x to only include mean/std cols
-
-# Bind together by columns the subject, Y and X datasets
+```
+Bind together by columns the subject, Y and X datasets:
+```
 fullFrame <- cbind(subject,y,x) # clip together subject, activity, mean/std cols
-
-# Give names to all columns, and remove non-standard characters such as brackets and hyphens
-# This fulfils project requirement: "Appropriately labels the data set with descriptive variable names."
+```
+Give names to all columns, and remove non-standard characters such as brackets and hyphens. This fulfils project requirement: "Appropriately labels the data set with descriptive variable names.":
+```
 names(fullFrame) <- c("Subject","Activity",names(x)) # create column names
 names(fullFrame) <- gsub(".","",make.names(names(fullFrame)),fixed=TRUE)
-
-# Group the data by subject and activity. Each combination has multiple rows
+```
+Group the data by subject and activity. Each combination has multiple rows:
+```
 grouped <- group_by(fullFrame, Subject, Activity)
-
-# For each combination of subject and activity, take the mean of all values in each column, leaving a single row per combination
-# This fulfils project requirement: "From the data set in step 4, creates a second, independent tidy data set with the average of 
-# each variable for each activity and each subject."
+```
+For each combination of subject and activity, take the mean of all values in each column, leaving a single row per combination. This fulfils project requirement: "From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.":
+```
 finalFrame <- summarise_each(grouped, funs(mean))
+```
+Write the tidy data file to R working directory. This is the file that is uploaded to the Coursera project page:
+```
+write.table(finalFrame, file = "UCIGetCleanTidyData.txt",row.names = FALSE)
 ```
 
 ## How to read the tidy data file into R
@@ -80,8 +87,6 @@ finalFrame <- summarise_each(grouped, funs(mean))
 ## Notes
 
 The script assumes that all files are in same directory.
-
-Multiple scripts could have been used, but a single integrated script has been chosen for the sake of simplicity.
 
 Dplyr package must be installed before running the script.
 
@@ -107,9 +112,9 @@ The files in the Inertial Signals folders are excluded for efficiency, because n
 
 The variables are given descriptive names by matching the 561 features listed in features.txt with the 561 columns in X_text.txt and X_train.txt, and non-standard characters are removed using the gsub() and make.names() functions. The names are descriptive because instead of just column numbers, they signify the measured components of each feature (t/f for time/frequency, body/gravity for the motion components, acc/gyro for the sensor signals etc).
 
-In the absence of clarification, all feature names containing "mean" or "std have been chosen (eg "meanFreq" counts as "mean"), on the grounds that it's better to err on the side of providing too much information rather than not enough. The hypothetical user of the tidy data file can ignore any data they don't want, but can't use data that hasn't been provided.
+In the absence of clarification, all feature names containing "mean" or "std" have been chosen (eg "meanFreq" counts as "mean"), on the grounds that it's better to err on the side of providing too much information rather than not enough. The hypothetical user of the tidy data file can ignore any data they don't want, but can't use data that hasn't been provided.
 
-As per David Hood (https://thoughtfulbloke.wordpress.com/2015/09/09/getting-and-cleaning-the-assignment), both long and wide forms are considered tidy. Wide form has been chosen here, simply for personal preference as a 3NF data analyst.
+As per David Hood (https://thoughtfulbloke.wordpress.com/2015/09/09/getting-and-cleaning-the-assignment) and Hadley Wickham (http://vita.had.co.nz/papers/tidy-data.html), both long and wide forms are considered tidy. Wide form has been chosen here, simply for personal preference as a 3NF data analyst.
 
 Original data has errors causing non-unique column names. Chosen method of avoiding this problem was to cull mean/std via grep before running dplyr.
 
