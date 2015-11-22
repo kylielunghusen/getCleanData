@@ -19,7 +19,7 @@ http://archive.ics.uci.edu/ml/machine-learning-databases/00240/UCI%20HAR%20Datas
 
 * More information about the features data is in features_info.txt in the UCI HAR zip file.
 
-* More information about the data used to create the tidy data file is in CodeBook.md in this repo.
+* More information about the data used to create the tidy data file is in [CodeBook.md](https://github.com/kylielunghusen/getCleanData/blob/master/CodeBook.md) in this repo.
 
 ## How to run the script
 
