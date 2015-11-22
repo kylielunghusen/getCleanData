@@ -78,7 +78,7 @@ Quote from the UCI HAR README file:
 > 
 > - 'train/Inertial Signals/body_gyro_x_train.txt': The angular velocity vector measured by the gyroscope for each window sample. The units are radians/second. 
 
-Data from the Inertial Signals folders were not used in creating the tidy data. More information is available in README.md in this repo.
+Data from the Inertial Signals folders were not used in creating the tidy data. More information is available in [README.md](https://github.com/kylielunghusen/getCleanData/blob/master/README.md) in this repo.
 
 ## Creating the tidy data file
 
